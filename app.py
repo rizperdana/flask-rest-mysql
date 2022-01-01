@@ -1,22 +1,27 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, jsonify
 from ma import ma
 from db import db
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+from marshmallow import ValidationError
 
-from resources import load_resources, bp
+from api import initialize_api, api, bp
 
 app = Flask(__name__)
 app.register_blueprint(bp)
-load_resources()
 load_dotenv()
+initialize_api()
 
 db_uri = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+@api.errorhandler(ValidationError)
+def handle_validation_error(error):
+  return jsonify(error.message), 400
 
 @app.before_first_request
 def setup_database():
