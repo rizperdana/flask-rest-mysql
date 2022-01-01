@@ -1,3 +1,4 @@
+from datetime import datetime
 from db import db
 from typing import List
 
@@ -10,14 +11,14 @@ class ProductModel(db.Model):
   logo_id = db.Column(db.Integer)
   #images = db.relationship("ImageModel", lazy="dynamic", primaryjoin="ImageMode.id == ProductModel.images")
   #logo_id = db.relationship("ImageModel", lazy="dynamic", primaryjoin="ImageMode.id == ProductModel.logo_id")
-  created_at = db.Column(db.DateTime)
-  updated_at = db.Column(db.DateTime)
+  created_at = db.Column(db.DateTime, default=datetime.now())
+  updated_at = db.Column(db.DateTime, onupdate=datetime.now())
 
   def __init__(self, **kwargs):
     super(ProductModel, self).__init__(**kwargs)
   
   def __repr__(self):
-    return 'ProductModel data:(%s)' % self
+    return 'ProductModel data:(%s)' % self.name
 
   @classmethod
   def find_by_name(cls, name) -> "ProductModel":
@@ -38,4 +39,3 @@ class ProductModel(db.Model):
   def delete_from_db(self) -> None:
     db.session.delete(self)
     db.session.commit()
-  
