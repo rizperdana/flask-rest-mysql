@@ -1,28 +1,31 @@
 from datetime import datetime
+from sqlalchemy.orm import backref
 from db import db
 
-class ProductModel(db.Model):
-  __tablename__ = "products"
+class VariantModel(db.Model):
+  __tablename__ = "variants"
   id = db.Column(db.Integer, primary_key = True)
   name = db.Column(db.String(200))
-  description = db.Column(db.String(1000))
+  size = db.Column(db.String(200))
+  color = db.Column(db.String(200))
   images = db.Column(db.Integer)
-  logo_id = db.Column(db.Integer)
   created_at = db.Column(db.DateTime)
   updated_at = db.Column(db.DateTime)
+  product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+  product = db.relationship("ProductModel", backref="variants")
 
   def __init__(self, **kwargs):
-    super(ProductModel, self).__init__(**kwargs)
+    super(VariantModel, self).__init__(**kwargs)
   
   def __repr__(self):
-    return 'ProductModel data:(%s)' % self.name
+    return 'VariantModel data:(%s)' % self.name
 
   @classmethod
-  def find_by_name(cls, name) -> "ProductModel":
+  def find_by_name(cls, name) -> "VariantModel":
     return cls.query.filter_by(name=name).first()
   
   @classmethod
-  def find_by_id(cls, _id) -> "ProductModel":
+  def find_by_id(cls, _id) -> "VariantModel":
     return cls.query.filter_by(id=_id).first()
   
   def post_to_db(self) -> None:

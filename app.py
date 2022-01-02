@@ -28,7 +28,7 @@ def setup_database():
   engine = create_engine(db_uri)
   if not database_exists(engine.url):
     create_database(engine.url)
-    print("New database created" + database_exists(engine.url))
+    print("New database created " + database_exists(engine.url))
   else:
     print("Database already exists")
   db.create_all()
