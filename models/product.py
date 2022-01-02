@@ -11,8 +11,8 @@ class ProductModel(db.Model):
   logo_id = db.Column(db.Integer)
   #images = db.relationship("ImageModel", lazy="dynamic", primaryjoin="ImageMode.id == ProductModel.images")
   #logo_id = db.relationship("ImageModel", lazy="dynamic", primaryjoin="ImageMode.id == ProductModel.logo_id")
-  created_at = db.Column(db.DateTime, default=datetime.now())
-  updated_at = db.Column(db.DateTime, onupdate=datetime.now())
+  created_at = db.Column(db.DateTime)
+  updated_at = db.Column(db.DateTime)
 
   def __init__(self, **kwargs):
     super(ProductModel, self).__init__(**kwargs)
@@ -27,12 +27,15 @@ class ProductModel(db.Model):
   @classmethod
   def find_by_id(cls, _id) -> "ProductModel":
     return cls.query.filter_by(id=_id).first()
-
-  @classmethod
-  def find_all(cls) -> List["ProductModel"]:
-    return cls.query.all()
   
-  def save_to_db(self) -> None:
+  def post_to_db(self) -> None:
+    self.updated_at = datetime.now()
+    self.created_at = datetime.now()
+    db.session.add(self)
+    db.session.commit()
+  
+  def put_to_db(self) -> None:
+    self.updated_at = datetime.now()
     db.session.add(self)
     db.session.commit()
   
