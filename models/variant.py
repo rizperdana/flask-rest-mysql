@@ -8,11 +8,12 @@ class VariantModel(db.Model):
   name = db.Column(db.String(200))
   size = db.Column(db.String(200))
   color = db.Column(db.String(200))
-  images = db.Column(db.Integer)
+  images = db.Column(db.Integer, db.ForeignKey("images.id"))
+  image = db.relationship("ImageModel", backref="image_variants", foreign_keys=[images])
+  product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+  product = db.relationship("ProductModel", backref="product_variants", foreign_keys=[product_id])
   created_at = db.Column(db.DateTime)
   updated_at = db.Column(db.DateTime)
-  product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
-  product = db.relationship("ProductModel", backref="variants")
 
   def __init__(self, **kwargs):
     super(VariantModel, self).__init__(**kwargs)

@@ -30,7 +30,7 @@ def setup_database():
     create_database(engine.url)
     print("New database created " + database_exists(engine.url))
   else:
-    if os.getenv('FLASK_ENV') == 'development':
+    if os.getenv('FLASK_ENV') == 'testing':
       db.drop_all()
     print("Database already exists, dropping...")
   db.create_all()

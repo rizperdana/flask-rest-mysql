@@ -6,8 +6,10 @@ class ProductModel(db.Model):
   id = db.Column(db.Integer, primary_key = True)
   name = db.Column(db.String(200))
   description = db.Column(db.String(1000))
-  images = db.Column(db.Integer)
-  logo_id = db.Column(db.Integer)
+  images = db.Column(db.Integer, db.ForeignKey("images.id"))
+  image = db.relationship("ImageModel", backref="image_products", foreign_keys=[images])
+  logo_id = db.Column(db.Integer, db.ForeignKey("images.id"))
+  logo = db.relationship("ImageModel", backref="logo_products", foreign_keys=[logo_id])
   created_at = db.Column(db.DateTime)
   updated_at = db.Column(db.DateTime)
 

@@ -2,10 +2,12 @@ from flask import request
 from flask_restx import Resource, fields, Namespace
 from models.variant import VariantModel
 from models.product import ProductModel
-from resources.product import Product
+from models.image import ImageModel
+from resources.product import IMAGE_NOT_FOUND
 from schemas.variant import VariantSchema
 
 VARIANT_NOT_FOUND = "Variant not found."
+IMAGE_NOT_FOUND = "Image not found."
 PRODUCT_ID_NOT_FOUND = "Product id not found."
 
 api = Namespace('variant', description = 'Variant related operations')
@@ -30,6 +32,8 @@ class VariantList(Resource):
   @api.expect(variant)
   def post(self):
     data = request.get_json()
+    if not (ImageModel.find_by_id(data['images'])):
+      return {'message': IMAGE_NOT_FOUND}, 404
     if not (ProductModel.query.get(data['product_id'])):
       return {'message': PRODUCT_ID_NOT_FOUND}, 404
     variant_data = variant_schema.load(data)
@@ -54,6 +58,8 @@ class Variant(Resource):
     data = request.get_json()
     if not (ProductModel.query.get(data['product_id'])):
       return {'message': PRODUCT_ID_NOT_FOUND}, 404
+    if not (ImageModel.find_by_id(data['images'])):
+      return {'message': IMAGE_NOT_FOUND}, 404
     query = VariantModel.query.get_or_404(id)
 
     if (data['product_id'])  : query.product_id = data['product_id']

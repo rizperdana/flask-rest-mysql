@@ -19,6 +19,10 @@ class ImageModel(db.Model):
   def find_by_url(cls, url) -> "ImageModel":
     return cls.query.filter_by(url=url).first()
   
+  @classmethod
+  def find_by_id(cls, _id) -> "ImageModel":
+    return cls.query.filter_by(id=_id).first()
+
   def post_to_db(self) -> None:
     self.updated_at = datetime.now()
     self.created_at = datetime.now()

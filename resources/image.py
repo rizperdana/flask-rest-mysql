@@ -46,7 +46,7 @@ class Image(Resource):
   @api.expect(image)
   def put(self, id):
     data = request.get_json()
-    if (ImageModel.query.filter_by(url=data['url'])):
+    if ImageModel.find_by_url(data['url']):
       return {'message': IMAGE_ALREADY_EXIST.format(data['url'])}, 400
     query = ImageModel.query.get(id)
 
