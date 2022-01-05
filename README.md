@@ -35,9 +35,11 @@ PORT=5555
 After that we can start our app by running this command:
 
 ```
-flask shell
+source /your/path/to/project/venv/bin/activate
 ```
 
 ```
-flask start
+flask run
 ```
+
+The database and tables will instantly generated on first API hit, so make sure you have setup it with correct value. On the other side if you set `FLASK_ENV=testing` the database always truncated everytime we restart the app. So if you want to keep the data don't put `testing` env.
