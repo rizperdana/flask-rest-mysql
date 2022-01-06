@@ -3,7 +3,6 @@ from flask_restx import Resource, fields, Namespace
 from models.variant import VariantModel
 from models.product import ProductModel
 from models.image import ImageModel
-from resources.product import IMAGE_NOT_FOUND
 from schemas.variant import VariantSchema
 
 VARIANT_NOT_FOUND = "Variant not found."
