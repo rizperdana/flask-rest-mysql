@@ -18,7 +18,7 @@ image = api.model('Image', {
 class ImageList(Resource):
   @api.doc('Get all images')
   def get(self):
-    return image_list_schema.dump(ImageModel.query.all()), 200
+    return { 'data': image_list_schema.dump(ImageModel.query.all())}, 200
   
   @api.doc('Store image')
   @api.expect(image)
@@ -29,7 +29,7 @@ class ImageList(Resource):
     image_data = image_schema.load(data)
     image_data.post_to_db()
 
-    return image_schema.dump(image_data), 200
+    return { 'data': image_schema.dump(image_data) }, 200
 
 @api.route('/<int:id>')
 @api.response(404, 'Image not found')
@@ -39,7 +39,7 @@ class Image(Resource):
   def get(self, id):
     image_data = ImageModel.query.get(id)
     if image_data:
-      return image_schema.dump(image_data)
+      return { 'data': image_schema.dump(image_data) }, 200
     return {'message': IMAGE_NOT_FOUND}, 404
 
   @api.doc('Update image url')
@@ -53,7 +53,7 @@ class Image(Resource):
     query.url = data['url']
     query.put_to_db()
 
-    return image_schema.dump(query), 200
+    return { 'data': image_schema.dump(query) }, 200
 
   @api.doc('Delete image')
   def delete(self, id):

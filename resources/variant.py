@@ -25,7 +25,7 @@ variant = api.model('Variant', {
 class VariantList(Resource):
   @api.doc('Get all Variants')
   def get(self):
-    return variant_list_schema.dump(VariantModel.query.all()), 200
+    return { 'data': variant_list_schema.dump(VariantModel.query.all()) }, 200
   
   @api.doc('Create a Variant')
   @api.expect(variant)
@@ -38,7 +38,7 @@ class VariantList(Resource):
     variant_data = variant_schema.load(data)
     variant_data.post_to_db()
 
-    return variant_schema.dump(variant_data), 200
+    return { 'data': variant_schema.dump(variant_data) }, 200
 
 @api.route('/<int:id>')
 @api.response(404, 'Variant not found')
@@ -48,7 +48,7 @@ class Variant(Resource):
   def get(self, id):
     variant_data = VariantModel.find_by_id(id)
     if variant_data:
-      return variant_schema.dump(variant_data)
+      return { 'data': variant_schema.dump(variant_data)}, 200
     return {'message': VARIANT_NOT_FOUND}, 404
 
   @api.doc('Update variant')
@@ -68,7 +68,7 @@ class Variant(Resource):
     if (data['images'])      : query.images = data['images']
     query.put_to_db()
 
-    return variant_schema.dump(query), 200
+    return { 'data': variant_schema.dump(query) }, 200
 
   @api.doc('Delete Variants by id')
   def delete(self, id):

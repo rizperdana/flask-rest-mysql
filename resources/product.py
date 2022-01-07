@@ -23,7 +23,7 @@ product = api.model('Product', {
 class ProductList(Resource):
   @api.doc('Get all Products')
   def get(self):
-    return product_list_schema.dump(ProductModel.query.all()), 200
+    return { 'data': product_list_schema.dump(ProductModel.query.all()) }, 200
   
   @api.doc('Create a Product')
   @api.expect(product)
@@ -40,7 +40,7 @@ class ProductList(Resource):
     product_data = product_schema.load(data)
     product_data.post_to_db()
 
-    return product_schema.dump(product_data), 200
+    return { 'data': product_schema.dump(product_data)}, 200
 
 @api.route('/<int:id>')
 @api.response(404, 'Product not found')
@@ -50,7 +50,7 @@ class Product(Resource):
   def get(self, id):
     product_data = ProductModel.find_by_id(id)
     if product_data:
-      return product_schema.dump(product_data)
+      return { 'data': product_schema.dump(product_data)}, 200
     return {'message': PRODUCT_NOT_FOUND}, 404
 
   @api.doc('Update product')
@@ -70,7 +70,7 @@ class Product(Resource):
     if (data['logo_id'])      : query.logo_id = data['logo_id']
     query.put_to_db()
 
-    return product_schema.dump(query), 200
+    return { 'data': product_schema.dump(query) }, 200
 
   @api.doc('Delete Products by id')
   def delete(self, id):
