@@ -1,5 +1,3 @@
-# This repo used for backend challange on SourceSage
-
 ![image](/statics/swagger.png)
 
 ## What stack are we using
